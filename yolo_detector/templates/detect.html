@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <title>Object Detection</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static '/css/detect.css' %}">
+  </head>
+  <body>
+    <div class="testbox">
+      <form id="class_form" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="banner">
+          <h1>Object Detection</h1>
+        </div>
+        <a href="{% url 'logout' %}"  role="menuitem" title="logout"><i class="icon md-power" aria-hidden="true"></i> Logout</a>
+        <a href="{% url 'view' %}"  role="menuitem" title="Auto delete data table view page"><i class="icon md-power" aria-hidden="true"></i> view </a>
+        <h2>Applicant Details</h2>
+        <div class="item">
+            <p><span>Choose classes<label style="color:red">*</label> :</span></p>
+            <select name="classes" id="classes" multiple required>
+              <option value="" disabled>Choose your classes</option> 
+              {% for obj in objects %}
+                <option value="{{obj}}">{{obj}}</option>  
+              {% endfor %}
+            </select>
+        </div>
+        <div class="item">
+          <p>Choose video for detect object:</p>
+          <input type="file" name="video_file" id ="video_file">
+        </div>
+        <div class="item1">
+          <p>Choose webcam for detect object:</p>
+          <select name="webcam" id ="webcam">
+            <option value="" disabled selected>Choose your cams</option> 
+            <option value="webcam">webcam</option>
+          </select>
+        </div>
+        <div class="btn-block">
+          <!-- <input class="onsubmit btn-save btn btn-primary btn-sm" type="submit" name="onsubmit" value="submit"> -->
+          <button class="onsubmit btn-save btn btn-primary btn-sm" type="submit" name="onsubmit" type="submit" href="/">Send</button>
+        </div>
+      </form>
+    </div>
+  </body>
+  <!-- Load script jquery,validate,addmethodjs,bootstrap js -->
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  </html>
+  <script type="text/javascript">
+  $( document ).ready(function() {
+    var token = '{{csrf_token}}';
+    $('#class_form').on('submit', function(event) {
+      event.preventDefault();
+      var formData = new FormData(this);
+      $.ajax({
+          url: "{% url 'detect' %}",
+          type: 'POST',
+          data: formData,
+          cache: false,
+          processData: false,
+          contentType: false,
+          headers: { "X-CSRFToken": token },
+          success: function(response){
+            console.log(response);
+          },
+          error: function(error){
+            console.log(error);
+          }
+      });
+    });
+  });
+  </script>
+</html>
