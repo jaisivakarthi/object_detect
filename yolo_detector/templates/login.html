@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <title>login form</title>
+    <link rel="stylesheet" type="text/css" href="{%static '/css/login.css'%}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <form method="post" id="signupform" action="{% url 'login' %}" autocomplete="off">
+      {% csrf_token %} 
+      <h1>Login Form</h1>
+      <div class="formcontainer">
+      <hr/>
+      <div class="container">
+        <label for="uname"><strong>Username</strong></label>
+        <input type="text" placeholder="Enter Username -admin" id="username" name="username" value="" required>
+        <label for="psw"><strong>Password</strong></label>
+        <input type="password" placeholder="Enter Password-123456" id="password" name="password" value="" required>
+      </div>
+      <!-- Flash Message Starts -->
+      {% if messages %}
+          {% for msg in messages %}
+              <div class="alert alert-danger" role="alert">
+                {{msg.message}}
+              </div>
+          {% endfor %}
+      {% endif %}
+      <!-- Flash Message Ends -->
+      <button type="submit" id="signup" name="signup" class="btn btn-primary btn-block">Login</button>
+    </div>
+    </form>
+  </body>
+</html>

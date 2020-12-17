@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Auto Delete</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+  <style type="text/css">
+    td{
+        text-align: center;
+    }
+    #remove_data{
+        margin: 12px;
+        float: left;
+        width: auto;
+        height: 25px;
+        background: #095484;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        line-height: 25px;
+        text-decoration: none !important;
+        text-align: center;
+    }
+  </style>
+</head>
+<a href="{% url 'auto_delete' %}"  role="menuitem" id ="remove_data" title="click to delete the last 7 days records"><i class="icon md-power" aria-hidden="true"></i> Auto Delete</a>
+<a href="{% url 'index' %}"  role="menuitem" id ="remove_data" title="view object detection page"><i class="icon md-power" aria-hidden="true"></i>Object Detection</a>
+<body>
+<table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Date</th>
+            </tr>
+        </tfoot>
+    </table>
+<script>
+function setupData() {
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "ajax": {
+                "url": "/list", 
+                "dataType": "json",
+                "dataSrc": "",
+            },
+            "columns": [
+                {"data": "fields.name"},
+                {"data": "fields.price"},
+                {"data": "fields.quantity"},
+                {"data": "fields.created_date",
+                    "render": function (data) {
+                        var date = new Date(data);
+                        var month = date.getMonth() + 1;
+                        return (month.toString().length > 1 ? month : "0" + month) + "/" + date.getDate() + "/" + date.getFullYear()+ "&nbsp;&nbsp;" +(date.getHours() < 10 ? ("0"+date.getHours()) : date.getHours())+ ":"+(date.getMinutes() < 10 ? ("0"+date.getMinutes()) : date.getMinutes());
+                    }
+                },
+            ]
+        });
+    });
+}
+$( window ).on( "load", setupData );
+</script>
+</body>
+</html>
